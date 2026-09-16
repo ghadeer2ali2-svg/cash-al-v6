@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASH AL — الخدمات المالية الذكية</title>
+    <!-- تضمين مكتبة Tailwind CSS للتصميم العصري المدمج والسريع -->
+    <script src="https://tailwindcss.com"></script>
+    <style>
+        body { background-color: #0b0f19; color: #f1f5f9; font-family: system-ui, sans-serif; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between pb-20">
+
+    <!-- الشريط العلوي النظيف والمختصر لعدم عجقة التبويبات -->
+    <header class="glass sticky top-0 z-50 p-4 flex justify-between items-center shadow-lg">
+        <div class="text-xl font-bold text-sky-400 tracking-wider">⚡ CASH AL</div>
+        <div class="flex items-center space-x-4 space-x-reverse">
+            <!-- قائمة منسدلة أنيقة لعرض الأرصدة بجميع العملات وعزل التوثيق -->
+            <div class="relative group">
+                <button class="bg-slate-800/80 hover:bg-slate-800 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center transition">
+                    💼 حسابي ورصيدي
+                </button>
+                <div class="absolute left-0 mt-2 w-56 glass rounded-2xl p-4 hidden group-hover:block shadow-2xl z-50 space-y-3">
+                    <p class="text-slate-400 text-[10px] border-b border-slate-700 pb-1">الأرصدة الحالية:</p>
+                    <p class="text-xs font-bold text-emerald-400">💵 المحفظة الآمنة: <span id="safeBal">0.00</span> USDT</p>
+                    <p class="text-xs font-bold text-amber-400">📈 الاستثمارية (3%): <span id="investBal">0.00</span> USDT</p>
+                    <p class="text-xs font-bold text-sky-400">🎁 النقاط المجمعة: <span id="pointsBal">0</span> نقطة</p>
+                    <!-- عزل توثيق الحساب بالكامل داخل ملف المستخدم بخصوصية تامة -->
+                    <div class="border-t border-slate-700 pt-2 text-center">
+                        <label class="block text-[11px] text-amber-400 font-bold mb-1">🛡️ توثيق الحساب (KYC)</label>
+                        <input type="file" id="kycFile" class="hidden" accept="image/*">
+                        <label for="kycFile" class="cursor-pointer text-[10px] bg-sky-500/20 hover:bg-sky-500 text-sky-300 hover:text-white py-1 px-2 rounded-lg block transition">📸 رفع وثيقة الهوية</label>
+                    </div>
+                </div>
+            </div>
+            <button id="logoutBtn" class="bg-red-600/80 hover:bg-red-600 px-3 py-1.5 rounded-xl text-xs font-semibold transition">خروج</button>
+        </div>
+    </header>
+    <!-- الحاوية الرئيسية للأقسام والديناميكية المدمجة لمنع التمرير الطويل -->
+    <main class="container mx-auto p-4 md:p-8 max-w-lg space-y-6">
+        
+        <!-- التبويب الأول والأساسي: بطاقة الشحن والسحب والحاسبة الفورية -->
+        <section id="tab-wallet" class="glass p-6 rounded-3xl shadow-2xl space-y-4 tab-content">
+            <div class="flex justify-between border-b border-slate-700 pb-2">
+                <h2 class="text-sm font-bold text-sky-400">🏦 الإيداع والسحب الذكي</h2>
+                <div class="flex space-x-2 space-x-reverse text-[11px]">
+                    <button id="btn-dep" class="bg-sky-500 text-white px-2.5 py-1 rounded-lg font-bold">إيداع / شحن</button>
+                    <button id="btn-wit" class="bg-slate-800 text-slate-400 px-2.5 py-1 rounded-lg font-bold">سحب رصيد</button>
+                </div>
+            </div>
+            
+            <!-- خيارات اختيار نوع المحافظ الموجهة ديناميكياً للسيرفر -->
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+                <label class="bg-slate-900 border border-slate-700 p-2.5 rounded-xl flex items-center justify-center cursor-pointer">
+                    <input type="radio" name="walletType" value="safe" checked class="ml-2 accent-sky-400"> المحفظة الآمنة (مجاني)
+                </label>
+                <label class="bg-slate-900 border border-slate-700 p-2.5 rounded-xl flex items-center justify-center cursor-pointer">
+                    <input type="radio" name="walletType" value="invest" class="ml-2 accent-amber-400"> الاستثمارية (عائد 3%)
+                </label>
+            </div>
+
+            <!-- خانات الحاسبة الفورية لحساب فرق العملات والصافي لحظة بلحظة -->
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-400 mb-1">المبلغ المراد شحنه أو سحبه:</label>
+                    <input type="number" id="mainAmount" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl text-white focus:outline-none focus:border-sky-400 font-bold">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">نوع الشبكة أو البوابة المحلية:</label>
+                    <select id="currencySelect" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl text-white focus:outline-none focus:border-sky-400">
+                        <option value="USDT">USDT (شبكة TRC-20 العالمية)</option>
+                        <option value="SHAM">شام كاش (Sham Cash — ليرة/دولار)</option>
+                        <option value="SYRIATEL">سيريتل كاش (Syriatel Cash)</option>
+                    </select>
+                </div>
+                <!-- عرض القيمة النهائية الصافية مخفية النسبة مسبقاً لراحة الزبون -->
+                <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex justify-between items-center text-[11px]">
+                    <span class="text-slate-400">المبلغ الصافي النهائي المضاف/المخصوم:</span>
+                    <span id="netAmount" class="font-bold text-emerald-400">0.00 USDT</span>
+                </div>
+            </div>
+
+            <!-- نظام النسخ السريع التفاعلي الذي يفجر خانة الكود أوتوماتيكياً لمنع الخطأ -->
+            <div id="copyAddressZone" class="p-3 bg-slate-900 border border-dashed border-slate-700 rounded-xl space-y-2 hidden">
+                <p class="text-[10px] text-slate-400">عنوان محفظة الإيداع الرسمية التابعة للمنصة:</p>
+                <div class="flex items-center justify-between bg-slate-950 p-2 rounded-lg text-[11px]">
+                    <code id="walletAddr" class="text-sky-300 font-mono select-all">TX9zR7k...4a8B1qW</code>
+                    <button id="btnCopy" class="bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded-md text-[10px] font-bold text-slate-300 transition">📋 نسخ العنوان</button>
+                </div>
+            </div>
+            <div id="txCodeZone" class="space-y-1 hidden text-xs">
+                <label class="block text-amber-400 font-bold">✍️ قُم بلصق رقم رمز العملية أو الحوالة هنا لتأكيد طلبك:</label>
+                <input type="text" id="txCodeInput" placeholder="أدخل كود المعاملة أو رقم الإشعار" class="w-full bg-slate-900 border border-amber-500/50 p-3 rounded-xl text-white focus:outline-none focus:border-amber-400 font-mono">
+            </div>
+            <button id="btnSubmitWallet" class="w-full bg-sky-500 hover:bg-sky-600 py-3.5 rounded-xl font-bold transition text-xs shadow-lg shadow-sky-500/10">تقديم طلب المعاملة للتأكيد الفوري</button>
+        </section>
+        <!-- التبويب الثاني والمستقل: شبكة التحويل المباشر بين الحسابات P2P -->
+        <section id="tab-p2p" class="glass p-6 rounded-3xl shadow-2xl space-y-4 tab-content hidden">
+            <h2 class="text-sm font-bold text-emerald-400 border-b border-slate-700 pb-2">🤝 شبكة التحويل المباشر (P2P)</h2>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-400 mb-1">معرّف الحساب المستلم (User ID):</label>
+                    <input type="text" placeholder="مثال: 10455" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400 font-bold">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">المبلغ المراد إرساله (خصم تلقائي من المحفظة الآمنة):</label>
+                    <input type="number" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl text-white focus:outline-none focus:border-emerald-400 font-bold">
+                </div>
+            </div>
+            <button class="w-full bg-emerald-500 hover:bg-emerald-600 py-3.5 rounded-xl font-bold transition text-xs shadow-lg shadow-emerald-500/10">تأكيد وتحويل الرصيد الآمن</button>
+        </section>
+
+        <!-- التبويب الثالث: مركز المكافآت وعجلة الحظ الرقمية الجاذبة لآلاف الزوار -->
+        <section id="tab-rewards" class="glass p-6 rounded-3xl shadow-2xl space-y-4 tab-content hidden text-center">
+            <div class="border-b border-slate-700 pb-2 text-right">
+                <h2 class="text-sm font-bold text-amber-400">🎁 مركز الجوائز والأرباح المجانية</h2>
+            </div>
+            <!-- تصميم هندسي لعجلة الحظ الدائرية مع خانة الآيفون شبه المستحيلة -->
+            <div class="relative w-48 h-48 mx-auto my-4 rounded-full border-4 border-amber-400 flex items-center justify-center bg-slate-900 shadow-2xl overflow-hidden">
+                <div class="absolute w-full h-full border-t border-slate-700 rotate-45"></div>
+                <div class="absolute w-full h-full border-t border-slate-700 -rotate-45"></div>
+                <div class="z-10 bg-slate-950 p-3 rounded-full text-[10px] font-bold text-amber-400 border border-amber-500 animate-pulse">🎯 دار الحظ</div>
+                <!-- نص الجائزة الكبرى الجاذب بصرياً للعملاء -->
+                <div class="absolute top-2 text-[9px] font-bold text-sky-400 tracking-tighter">📱 iPhone 17 Pro Max</div>
+                <div class="absolute bottom-2 text-[9px] font-bold text-emerald-400">💰 50 نقطة</div>
+            </div>
+            <button id="spinBtn" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-6 py-2 rounded-xl text-xs shadow-lg shadow-amber-500/20 transition">🎯 تدوير العجلة الحية</button>
+            <p class="text-[10px] text-slate-400 pt-2 border-t border-slate-800">🔗 رابط إحالتك الفريد: <span class="text-sky-400 font-mono">://cashal.com</span></p>
+        </section>
+    </main>
+
+    <!-- الشريط الملاحي السفلي الثابت والذكي لمنع التمرير الطويل نهائياً على الهاتف -->
+    <nav class="fixed bottom-0 left-0 right-0 glass border-t border-slate-800 p-2 flex justify-around items-center z-50 shadow-2xl">
+        <button id="nav-wallet" class="flex flex-col items-center text-sky-400 font-bold transition"><span class="text-lg">🏦</span><span class="text-[10px]">التحويل</span></button>
+        <button id="nav-p2p" class="flex flex-col items-center text-slate-500 hover:text-emerald-400 transition"><span class="text-lg">🤝</span><span class="text-[10px]">شبكة P2P</span></button>
+        <button id="nav-rewards" class="flex flex-col items-center text-slate-500 hover:text-amber-400 transition"><span class="text-lg">🎁</span><span class="text-[10px]">المكافآت</span></button>
+    </nav>
+
+    <!-- شريط الحقوق الفاخر والبصمة الإلكترونية الفاخرة لـ eng.ali.iessa -->
+    <footer class="bg-slate-950/40 border-t border-slate-900/50 p-4 text-center space-y-1 text-[11px]">
+        <p class="font-bold text-sky-400 tracking-wider">⚡ CASH AL — الخدمات المالية الذكية</p>
+        <p class="text-slate-300">
+            Developed & Supervised with Absolute Security by: 
+            <span class="text-emerald-400 font-mono tracking-widest block font-bold drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]">⚡ eng.ali.iessa ⚡</span>
+        </p>
+    </footer>
+
+    <!-- برمجية التبديل المتفاعل بين الألسنة والقوائم السفلية بلمحة عين وبدون تمرير -->
+    <script>
+        const tabs = { wallet: document.getElementById('tab-wallet'), p2p: document.getElementById('tab-p2p'), rewards: document.getElementById('tab-rewards') };
+        const navs = { wallet: document.getElementById('nav-wallet'), p2p: document.getElementById('nav-p2p'), rewards: document.getElementById('nav-rewards') };
+        
+        function switchTab(target) {
+            Object.keys(tabs).forEach(k => { tabs[k].classList.add('hidden'); navs[k].className = "flex flex-col items-center text-slate-500 transition"; });
+            tabs[target].classList.remove('hidden');
+            navs[target].className = `flex flex-col items-center font-bold transition \${target === 'wallet' ? 'text-sky-400' : target === 'p2p' ? 'text-emerald-400' : 'text-amber-400'}`;
+        }
+        
+        navs.wallet.addEventListener('click', () => switchTab('wallet'));
+        navs.p2p.addEventListener('click', () => switchTab('p2p'));
+        navs.rewards.addEventListener('click', () => switchTab('rewards'));
+        
+        document.getElementById('currencySelect').addEventListener('change', (e) => {
+            const copyZone = document.getElementById('copyAddressZone');
+            const txZone = document.getElementById('txCodeZone');
+            if(e.target.value === 'USDT') { copyZone.classList.remove('hidden'); txZone.classList.remove('hidden'); }
+            else { copyZone.classList.add('hidden'); txZone.classList.add('hidden'); }
+        });
+        
+        document.getElementById('btnCopy').addEventListener('click', () => {
+            const btn = document.getElementById('btnCopy');
+            btn.className = "bg-emerald-600 px-3 py-1 rounded-md text-[10px] font-bold text-white transition";
+            btn.innerText = "✅ تم النسخ";
+            setTimeout(() => { btn.className = "bg-slate-800 px-3 py-1 rounded-md text-[10px] font-bold text-slate-300"; btn.innerText = "📋 نسخ العنوان"; }, 2000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سيرفر القيادة المركزي — CASH AL</title>
+    <script src="https://tailwindcss.com"></script>
+    <style>
+        body { background-color: #020617; color: #f8fafc; font-family: system-ui, sans-serif; }
+        .admin-panel { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(239, 68, 68, 0.2); }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex flex-col justify-between pb-12">
+
+    <div class="max-w-4xl mx-auto w-full space-y-6">
+        <!-- ترويسة الأمان العالي لوحة التحكم -->
+        <div class="admin-panel p-4 rounded-xl flex justify-between items-center shadow-2xl border-l-4 border-l-red-500">
+            <div>
+                <h1 class="text-md font-bold text-red-400">🎛️ لوحة إدارة العمليات السرية [Admin]</h1>
+                <p class="text-[10px] text-slate-400">نظام الأتمتة الكاملة ومكافآت الولاء المباشرة للأدمن</p>
+            </div>
+            <span class="bg-red-500/10 text-red-400 text-xs px-2.5 py-1 rounded-full border border-red-500/20 font-bold">بيئة حية ومحمية</span>
+        </div>
+
+        <!-- طابور فحص المعاملات المالي الممنوع من التشتت والأخطاء البشرية -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
+            <h2 class="text-sm font-bold text-slate-300 border-b border-slate-800 pb-2">📋 طابور المعاملات المؤتمت (نقرة زر واحدة للتحديث)</h2>
+            
+            <div class="p-4 bg-slate-950 rounded-xl space-y-3 text-sm">
+                <div class="flex justify-between border-b border-slate-900 pb-2 text-xs">
+                    <span class="text-slate-400">معرّف الطلب الحالي: #77492</span>
+                    <span class="text-amber-400 font-bold">الحالة: انتظار المراجعة والتأكيد الميداني</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs md:text-sm">
+                    <p><span class="text-slate-500">المستخدم:</span> عميل نشط</p>
+                    <p><span class="text-slate-500">نوع العملية:</span> شحن رصيد تلقائي</p>
+                    <p class="text-emerald-400 font-bold"><span class="text-slate-500 text-white">المبلغ المطلوب:</span> 50.00 USDT</p>
+                    <p class="text-sky-400 font-bold"><span class="text-slate-500 text-white">كود الحوالة المرفق:</span> SHAM-99482104</p>
+                </div>
+            </div>
+
+            <!-- أزرار الفصل الإداري الفوري المؤتمت بالكامل برمجياً في السيرفر الخلفي -->
+            <div class="flex flex-col gap-3 pt-2">
+                <button onclick="alert('تم الرفض برمجياً: السيرفر يعيد الأموال المجمدة تلقائياً لمحفظة العميل')" class="w-full bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-600/40 py-3 rounded-xl font-bold transition text-xs">❌ رفض الطلب وإلغاء المعاملة</button>
+                <button onclick="alert('تمت الموافقة برمجياً: السيرفر يحدث قاعدة البيانات ويضيف الرصيد فوراً في أجزاء من الثانية')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold transition text-xs shadow-lg shadow-emerald-900/20">✅ تدقيق يدوي وموافقة آلية فورية</button>
+            </div>
+        </div>
+        <!-- القسم الخاص بالأدمن العام: نظام إهداء المكافآت وحقن الأرصدة للمستخدمين النشيطين -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-xl space-y-4">
+            <h2 class="text-sm font-bold text-amber-400 border-b border-slate-800 pb-2">🎁 لوحة الأدمن العام: إهداء باقات الترحيب ورصيد المكافآت</h2>
+            <div class="grid grid-cols-1 gap-3 text-xs">
+                <div>
+                    <label class="block text-slate-400 mb-1">معرّف حساب المستخدم النشط (User ID):</label>
+                    <input type="text" id="giftUserId" placeholder="مثال: 10455" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl text-white focus:outline-none focus:border-amber-400 font-bold">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">المبلغ أو عدد النقاط المراد إهداؤها تلقائياً:</label>
+                    <input type="number" id="giftAmount" placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl text-white focus:outline-none focus:border-amber-400 font-bold">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">المحفظة المستهدفة بالهدية:</label>
+                    <select id="giftWalletType" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl text-white focus:outline-none focus:border-amber-400">
+                        <option value="safe">المحفظة الآمنة (رصيد كاش مباشر)</option>
+                        <option value="invest">المحفظة الاستثمارية (عائد 3%)</option>
+                        <option value="points">مركز المكافآت (نقاط لعجلة الحظ)</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="alert('تم إرسال المكافأة برمجياً: السيرفر يقوم بحقن الأرصدة وتحديث محفظة العميل فوراً تلقائياً!')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 py-3.5 rounded-xl font-bold transition text-xs shadow-lg shadow-amber-500/10">🎁 إرسال المكافأة وتحديث رصيد المستخدم</button>
+        </div>
+    </div>
+
+    <!-- تأكيد الحقوق الإلكترونية لـ eng.ali.iessa في لوحة التحكم -->
+    <footer class="text-center p-6 text-[11px] text-slate-500 border-t border-slate-900/50 mt-12 space-y-1" dir="ltr">
+        <p>CASH AL Control Center © 2026</p>
+        <p class="text-slate-300 font-semibold">
+            System Supervised by: <span class="text-emerald-400 font-mono font-bold tracking-wider">eng.ali.iessa</span>
+        </p>
+    </footer>
+
+</body>
+</html>
